@@ -25,7 +25,7 @@ pipeline {
           try{                    
             if("${branch}" != ""){ 
               println "----------webhook式触发-----------"
-              branchName = branch - "refs/heads"
+              branchName = branch - "*/*"
               branchName = sh(returnStdout: true,script: "echo ${branchName}|awk -F '/' '{print \$NF}'").trim()
               println "webhook触发的分支是: " + "${branchName}"
             }
