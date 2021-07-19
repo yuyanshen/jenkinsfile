@@ -38,10 +38,6 @@ pipeline {
         }  
       } 
     }    
-    stage('checkOut') {
-      steps{
-        checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '4axxx', url: "${repoUrl}"]]])
-      }
-    }
+
   }
 }
