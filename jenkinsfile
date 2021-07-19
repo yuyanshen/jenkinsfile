@@ -1,5 +1,4 @@
 #!groovy
-@Library('htjfPipeline@master') _
 pipeline {
   agent any
   environment {
