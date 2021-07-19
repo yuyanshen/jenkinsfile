@@ -17,5 +17,10 @@ pipeline {
             printContributedVariables: true,
             printPostContent: true
         )
-  }    
+  }
+  stages {
+    stage('getBranch'){
+
+    }
+}    
 }
