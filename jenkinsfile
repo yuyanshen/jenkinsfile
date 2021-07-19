@@ -1,0 +1,48 @@
+#!groovy
+@Library('htjfPipeline@master') _
+pipeline {
+  agent any
+  environment {
+    repoUrl = "http://52.163.243.66:8081/gitlab-instance-f390ce36/jadegit_azaas.git"
+  }
+  parameters {
+    string(name:'repoBranch', defaultValue: '', description: 'git分支名称')  
+  }
+  triggers {
+    GenericTrigger(
+            genericVariables: [
+              [key: 'branch', value: '$.ref']
+            ],
+            token: 'testpipeline-yxgj-marketing-job_PUSH' ,
+            causeString: ' Triggered on $branch' ,
+            printContributedVariables: true,
+            printPostContent: true
+        )
+  }
+  stages {
+    stage('getBranch'){
+      steps{
+        script{
+          try{                    
+            if("${branch}" != ""){ 
+              println "----------webhook式触发-----------"
+              branchName = branch - "refs/heads"
+              branchName = sh(returnStdout: true,script: "echo ${branchName}|awk -F '/' '{print \$NF}'").trim()
+              println "webhook触发的分支是: " + "${branchName}"
+            }
+          } catch(exc) { }           
+            if("${params.repoBranch}" != ""){
+              println "-----------手动方式触发------------"
+              branchName = "${params.repoBranch}"
+              println "手动触发的分支是: " + "${branchName}"
+            }           
+        }  
+      } 
+    }    
+    stage('checkOut') {
+      steps{
+        checkout([$class: 'GitSCM', branches: [[name: "${branchName}"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '4axxx', url: "${repoUrl}"]]])
+      }
+    }
+  }
+}
