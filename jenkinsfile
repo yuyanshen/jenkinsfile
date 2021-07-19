@@ -20,7 +20,10 @@ pipeline {
   }
   stages {
     stage('getBranch'){
+        steps{
 
+}
     }
 }    
 }
+ 
