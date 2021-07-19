@@ -12,7 +12,7 @@ pipeline {
             genericVariables: [
               [key: 'branch', value: '$.ref']
             ],
-            token: 'testpipeline-yxgj-marketing-job_PUSH' ,
+            token: '_ZjfkjTZJAEg5seBtEts' ,
             causeString: ' Triggered on $branch' ,
             printContributedVariables: true,
             printPostContent: true
