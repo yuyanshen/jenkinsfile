@@ -38,11 +38,16 @@ pipeline {
                 println "-----------手动方式触发------------"
                 branchName = "${params.repoBranch}"
                 println "手动触发的分支是: " + "${branchName}"
-            
-            env.imageTag = sh (script: 'git rev-parse --short HEAD ${GIT_COMMIT}', returnStdout: true).trim()
-            env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B ${GIT_COMMIT}', returnStdout: true).trim()
-            echo ${imageTag}
-            echo ${GIT_COMMIT_MSG}
+          stage('gethashcode'){
+            steps{
+              script{
+                env.imageTag = sh (script: 'git rev-parse --short HEAD ${GIT_COMMIT}', returnStdout: true).trim()
+                env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B ${GIT_COMMIT}', returnStdout: true).trim()
+                echo ${imageTag}
+                echo ${GIT_COMMIT_MSG}
+              }
+            }
+          }
               } 
             }}
       }
