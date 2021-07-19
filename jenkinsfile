@@ -21,7 +21,8 @@ pipeline {
   stages {
     stage('getBranch'){
         steps{
-                echo "hehe"
+                branchName = sh(returnStdout: true,script: "echo ${branchName}|awk -F '/' '{print \$NF}'").trim()
+              println "webhook触发的分支是: " + "${branchName}"
 }
     }
 }    
