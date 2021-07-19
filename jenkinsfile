@@ -2,7 +2,7 @@
 pipeline {
   agent any
   environment {
-    repoUrl = "http://52.163.243.55/gitlab-instance-f390ce36/jadegit_azaas.git"
+    repoUrl = "http://52.163.243.66:8081/gitlab-instance-f390ce36/jadegit_azaas.git"
   }
   parameters {
     string(name:'repoBranch', defaultValue: '', description: 'git分支名称')  
