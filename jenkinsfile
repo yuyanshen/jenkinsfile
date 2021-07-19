@@ -1,6 +1,9 @@
 #!groovy
 pipeline {
-  agent any
+  agent {
+        node {
+            label "Centos"
+        }
   environment {
     repoUrl = "http://52.163.243.66:8081/gitlab-instance-f390ce36/jadegit_azaas.git"
   }
