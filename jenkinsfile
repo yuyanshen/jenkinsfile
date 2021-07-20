@@ -1,10 +1,6 @@
 #!groovy
 pipeline {
-    agent {
-          node {
-              label "Centos"
-          }
-    }
+    agent any
     environment {
       repoUrl = "http://52.163.243.66:8081/gitlab-instance-f390ce36/jadegit_azaas.git"
     }
@@ -38,20 +34,39 @@ pipeline {
                 println "-----------手动方式触发------------"
                 branchName = "${params.repoBranch}"
                 println "手动触发的分支是: " + "${branchName}"
+                }
+            }
+             
+          }
+        }
+        stage('getSource'){
+            steps{
+              git branch: "${branchName}", changelog: false, credentialsId: '675669a4-01c6-45aa-840d-925e157fd9de', poll: false, url: 'http://52.163.243.66:8081/gitlab-instance-f390ce36/jadegit_azaas.git'
+            }
+          }
           stage('gethashcode'){
             steps{
               script{
                 env.imageTag = sh (script: 'git rev-parse --short HEAD ${GIT_COMMIT}', returnStdout: true).trim()
                 env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B ${GIT_COMMIT}', returnStdout: true).trim()
-                echo ${imageTag}
-                echo ${GIT_COMMIT_MSG}
+                
               }
+              
             }
           }
-              } 
-            }}
-      }
-  }    
-  }
+          stage('打包分支变动代码'){
+            steps{
+              sh"git diff --name-only HEAD^ ${imageTag} | xargs tar -zcvf ${GIT_COMMIT_MSG}.tar.gz"
+            }
+          }
+          stage('合并到master分支'){
+            steps{
+              sh"git checkout master"
+              sh"git cherry-pick ${branchName}"
+            }
+          }
+
+              }
+        }
    
   
